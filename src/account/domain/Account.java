@@ -107,17 +107,13 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", accountNumber='" + accountNumber + '\'' +
-                ", balance=" + balance +
-                ", type=" + type +
-                ", bankId=" + bankId +
-                ", userId=" + userId +
-                ", employeeId=" + employeeId +
-                ", password='" + password + '\'' +
-                ", interestRate=" + interestRate +
-                ", createdTime=" + createdTime +
-                '}';
+        return "계좌 정보 {" +
+                "\n   계좌 번호: " + accountNumber +
+                "\n   잔액: " + balance +
+                "\n   계좌 유형: " + type +
+                "\n   이자율: " + interestRate +
+                "\n   계좌 생성 시간: " + createdTime +
+                "\n" +
+                "}";
     }
 }
