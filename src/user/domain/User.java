@@ -102,20 +102,20 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "uid=" + uid +
-                ", id='" + loginId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", job=" + job +
-                ", income=" + income +
-                ", asset=" + asset +
-                ", birth='" + birth + '\'' +
-                ", createdTime=" + createdTime +
-                ", deleteTime=" + deleteTime +
-                '}';
+        return "사용자 정보 {" +
+                "\n   사용자 ID: " + uid +
+                "\n   로그인 ID: " + loginId +
+                "\n   비밀번호: " + password +   // 보안상 비밀번호는 실제로 표시하지 않는 것이 좋습니다.
+                "\n   이름: " + name + 
+                "\n   주소: " + address + 
+                "\n   전화번호: " + phoneNumber + 
+                "\n   이메일: " + email + 
+                "\n   직업: " + job +
+                "\n   소득: " + income +
+                "\n   자산: " + asset +
+                "\n   생년월일: " + birth + 
+                "\n   계정 생성 시간: " + createdTime +
+                "\n   계정 삭제 시간: " + deleteTime +
+                '\n' + '}';
     }
 }
