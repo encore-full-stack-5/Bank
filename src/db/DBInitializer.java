@@ -41,5 +41,4 @@ public class DBInitializer {
             throw new RuntimeException(e);
         }
     }
-
 }
