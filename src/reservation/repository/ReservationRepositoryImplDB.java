@@ -46,6 +46,24 @@ public class ReservationRepositoryImplDB implements ReservationRepositoryDB {
             int affectedRows = stmt.executeUpdate();
         }
     }
+
+    @Override
+    public boolean isAvailableTime(int choseBankId,int choseReservationTime) throws Exception {
+        List<Reservation> reserved = new ArrayList<>();
+        String sql = "SELECT * FROM Reservation WHERE bankId ="+choseBankId+" and reservationTime = "+choseReservationTime;
+        try (Connection conn = DB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                reserved.add(extractReservation(rs));
+            }
+        }
+        if(reserved.size()==0){
+            return true;
+        }
+        return false;
+    }
+
     private Reservation extractReservation(ResultSet rs) throws Exception {
         return new Reservation(
                 rs.getInt("id"),

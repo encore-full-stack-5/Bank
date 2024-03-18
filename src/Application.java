@@ -114,7 +114,14 @@ public class Application {
                 reservationController.printAvailableTime(reservations,choseBankId,banks);
 
                 int choseReservationTime = ConsoleUtility.promptForChoice("위의 시간중 예약할 시간을 입력해주세요",8,15);
-                reservationController.createReservation(userState.getUid(), choseReservationTime,choseBankId);
+                boolean availableTime = reservationController.isAvailableTime(choseBankId,choseReservationTime);
+                if(availableTime){
+                    System.out.println("예약 가능한 시간입니다.");
+                    reservationController.createReservation(userState.getUid(), choseReservationTime,choseBankId);
+                    System.out.println("예약이 완료되었습니다.");
+                }else {
+                    System.out.println("예약 불가능한 시간입니다.");
+                }
 
             }
         }
