@@ -11,13 +11,17 @@ public class ConsoleUtility {
     // Static method to prompt user input
     public static String promptForInput(String message) {
         System.out.println(message);
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     // Static method to prompt user input
-    public static int promptForInt(String message) {
+    public static int promptForInt(String message) throws Exception  {
         System.out.println(message);
-        return scanner.nextInt();
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            throw new Exception("입력이 잘못되었습니다.")      ;
+        }
     }
 
     public static void systemMessage(String message) {
