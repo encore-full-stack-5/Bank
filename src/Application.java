@@ -135,69 +135,81 @@ public class Application {
     public static void accountMenu() throws Exception {
         int choice = ConsoleUtility.promptForChoice("1.계좌조회 2.계좌개설 3.계좌해지 4.입금하기 5.출금하기 6.내역조회 " ,1,6);
         switch (choice) {
-            case 1 -> {
-                List<Account> accounts = accountController.getAccounts(userState.getUid());
-                if(accounts.isEmpty()) return;
-                int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌중 조회하실 계좌를 선택해주세요",1,accounts.size());
-                Account choseAccount = accounts.get(showAccountChoice - 1);
-                ConsoleUtility.systemMessage(choseAccount.toString());
-            }
-            case 2 -> {
-                List<Bank> banks = bankController.findAllBanks();
-                Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행중 하나를 선택해주세요", 1, banks.size()) -1);
-                List<Employee> employees = bankController.findEmployeeByBankId(bank.getId());
-                Employee employee = employees.get(ConsoleUtility.promptForChoice("위의 직원중 하나를 선택해주세요", 1, employees.size()) -1);
-                Account account = accountController.createAccount(userState.getUid(), bank.getId(), employee.getId());
-                System.out.println("계좌개설 성공!!");
-                ConsoleUtility.systemMessage(account.toString());
-            }
-            case 3 -> {
-                List<Bank> banks = bankController.findAllBanks();
-                Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
-                List<Account> accounts = accountController.getAccounts(userState.getUid()); // controller에서 계좌 번호 목록을 보여준다.
-                int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌 중 해지하실 계좌를 선택해주세요",1,accounts.size());
-                Account account = accounts.get(showAccountChoice - 1); // 계좌 선택
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
-                accountController.deleteAccount(account.getId()); // 계좌 해지를 진행한다.
-                ConsoleUtility.systemMessage("계좌해지 완료되었습니다."); // 계좌 해지 완료 문구 출력
-            }
-            case 4 -> {
-                List<Bank> banks = bankController.findAllBanks();
-                Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
-                List<Account> accounts = accountController.getAccounts(userState.getUid());
-                int showAccountChoice = ConsoleUtility.promptForChoice("입금하실 계좌를 선택해주세요",1,accounts.size());
-                Account account = accounts.get(showAccountChoice - 1);
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
-                int inputAmount = ConsoleUtility.promptForInt("입금하실 금액을 눌러주세요");
-                TransactionHistory transactionHistory = accountController.deposit(account, inputAmount); // 입금 후 거래내역 가져오기
-                ConsoleUtility.systemMessage("입금이 완료되었습니다. 현재 잔액은 " + transactionHistory.totalAmount() + "입니다."); // 입금 후 잔액 조회
-            }
-            case 5 -> {
-                List<Bank> banks = bankController.findAllBanks();
-                Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
-                List<Account> accounts = accountController.getAccounts(userState.getUid());
-                int showAccountChoice = ConsoleUtility.promptForChoice("출금하실 계좌를 선택해주세요",1,accounts.size());
-                Account account = accounts.get(showAccountChoice - 1);
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
-                int inputAmount = ConsoleUtility.promptForInt("출금하실 금액을 눌러주세요");
-                TransactionHistory transactionHistory = accountController.withdraw(account, inputAmount); // 출금 후 거래내역 가져오기
-                ConsoleUtility.systemMessage("출금이 완료되었습니다. 현재 잔액은 " + transactionHistory.totalAmount() + "입니다."); // 출금 후 잔액 조회
-            }
-
-            case 6 -> {
-                List<Bank> banks = bankController.findAllBanks();
-                Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
-                List<Account> accounts = accountController.getAccounts(userState.getUid()); // controller에서 계좌 번호 목록을 보여준다.
-                int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌 중 조회하실 계좌를 선택해주세요",1,accounts.size());
-                Account account = accounts.get(showAccountChoice - 1); // 계좌 선택
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
-                List<TransactionHistory> transactionHistorys = accountController.showTransactions(account.getId());
-                transactionHistorys.forEach(transactionHistory -> System.out.println(transactionHistorys));
-            }
+            case 1 -> showAccount();
+            case 2 -> createAccount();
+            case 3 -> deleteAccount();
+            case 4 -> deposit();
+            case 5 -> withdraw();
+            case 6 -> showTransactions();
         }
+    }
+
+    public static void showAccount() throws Exception {
+        List<Account> accounts = accountController.getAccounts(userState.getUid());
+        if(accounts.isEmpty()) return;
+        int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌중 조회하실 계좌를 선택해주세요",1,accounts.size());
+        Account choseAccount = accounts.get(showAccountChoice - 1);
+        ConsoleUtility.systemMessage(choseAccount.toString());
+    }
+
+    public static void createAccount() throws Exception {
+        List<Bank> banks = bankController.findAllBanks();
+        Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행중 하나를 선택해주세요", 1, banks.size()) -1);
+        List<Employee> employees = bankController.findEmployeeByBankId(bank.getId());
+        Employee employee = employees.get(ConsoleUtility.promptForChoice("위의 직원중 하나를 선택해주세요", 1, employees.size()) -1);
+        Account account = accountController.createAccount(userState.getUid(), bank.getId(), employee.getId());
+        System.out.println("계좌개설 성공!!");
+        ConsoleUtility.systemMessage(account.toString());
+    }
+
+    public static void deleteAccount() throws Exception {
+        List<Bank> banks = bankController.findAllBanks();
+        Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
+        List<Account> accounts = accountController.getAccounts(userState.getUid()); // controller에서 계좌 번호 목록을 보여준다.
+        int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌 중 해지하실 계좌를 선택해주세요",1,accounts.size());
+        Account account = accounts.get(showAccountChoice - 1); // 계좌 선택
+        int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
+        account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+        accountController.deleteAccount(account.getId()); // 계좌 해지를 진행한다.
+        ConsoleUtility.systemMessage("계좌해지 완료되었습니다."); // 계좌 해지 완료 문구 출력
+    }
+
+    public static void deposit() throws Exception {
+        List<Bank> banks = bankController.findAllBanks();
+        Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
+        List<Account> accounts = accountController.getAccounts(userState.getUid());
+        int showAccountChoice = ConsoleUtility.promptForChoice("입금하실 계좌를 선택해주세요",1,accounts.size());
+        Account account = accounts.get(showAccountChoice - 1);
+        int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
+        account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+        int inputAmount = ConsoleUtility.promptForInt("입금하실 금액을 눌러주세요");
+        TransactionHistory transactionHistory = accountController.deposit(account, inputAmount); // 입금 후 거래내역 가져오기
+        ConsoleUtility.systemMessage("입금이 완료되었습니다. 현재 잔액은 " + transactionHistory.totalAmount() + "입니다."); // 입금 후 잔액 조회
+    }
+
+    public static void withdraw() throws Exception {
+        List<Bank> banks = bankController.findAllBanks();
+        Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
+        List<Account> accounts = accountController.getAccounts(userState.getUid());
+        int showAccountChoice = ConsoleUtility.promptForChoice("출금하실 계좌를 선택해주세요",1,accounts.size());
+        Account account = accounts.get(showAccountChoice - 1);
+        int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
+        account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+        int inputAmount = ConsoleUtility.promptForInt("출금하실 금액을 눌러주세요");
+        TransactionHistory transactionHistory = accountController.withdraw(account, inputAmount); // 출금 후 거래내역 가져오기
+        ConsoleUtility.systemMessage("출금이 완료되었습니다. 현재 잔액은 " + transactionHistory.totalAmount() + "입니다."); // 출금 후 잔액 조회
+    }
+
+    public static void showTransactions() throws Exception {
+        List<Bank> banks = bankController.findAllBanks();
+        Bank bank = banks.get(ConsoleUtility.promptForChoice("위의 은행 중 하나를 선택해주세요", 1, banks.size()) -1);
+        List<Account> accounts = accountController.getAccounts(userState.getUid()); // controller에서 계좌 번호 목록을 보여준다.
+        int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌 중 조회하실 계좌를 선택해주세요",1,accounts.size());
+        Account account = accounts.get(showAccountChoice - 1); // 계좌 선택
+        int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
+        account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+        List<TransactionHistory> transactionHistorys = accountController.showTransactions(account.getId());
+        transactionHistorys.forEach(System.out::println);
+
     }
 }
