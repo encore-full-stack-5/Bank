@@ -13,4 +13,6 @@ public interface ReservationService {
 
     void printAvailableTime(List<Reservation> reservations,int choseBankId,List<Bank> banks) throws Exception;
 
+    boolean isAvailableTime(int choseBankId,int choseReservationTime) throws Exception;
+
 }

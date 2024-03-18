@@ -33,4 +33,11 @@ public class ReservationControllerImpl implements ReservationController {
         reservationService.printAvailableTime(reservations,choseBankId,banks);
     }
 
+    @Override
+    public boolean isAvailableTime(int choseBankId,int choseReservationTime) throws Exception {
+        boolean availableTime =reservationService.isAvailableTime(choseBankId, choseReservationTime);
+        return availableTime;
+    }
+
+
 }
