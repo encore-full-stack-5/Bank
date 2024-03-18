@@ -30,7 +30,7 @@ public class Application {
     private static Bank bankState;
 
     public static void main(String[] args) {
-        DB.getInstance();
+//        DB.getInstance();
         while (true) {
             try {
                 if(userState == null) start();
