@@ -37,9 +37,9 @@ public class BankControllerImpl implements BankController {
     @Override
     public List<Account> findAccountsByEmployeeId(int id) throws Exception {
         List<Account> accounts =bankService.findAccountsByEmployeeId(id);
-        accounts.forEach(account -> System.out.print("계좌번호: "+account.getAccountNumber()+" ("+account.getType()+"통장)"+"\n"));
+        accounts.forEach(account -> System.out.print("계좌번호: "+account.getAccountNumber()+" ("
+                + (account.getType().equals("DEPOSIT")?"예금":"적금")+"통장)"+"\n"));
         System.out.println("총 "+accounts.size()+"개");
-        System.out.println();
         return accounts;
     }
 
