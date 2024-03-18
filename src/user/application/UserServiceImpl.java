@@ -3,14 +3,14 @@ package user.application;
 import user.domain.Income;
 import user.domain.User;
 import user.repository.UserRepository;
-import user.repository.UserRepositoryRealDB;
+import user.repository.UserRepositoryImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository = UserRepositoryRealDB.getInstance();
+    private final UserRepository repository = UserRepositoryImpl.getInstance();
 
     static class Holder {
         static final UserServiceImpl INSTANCE = new UserServiceImpl();
@@ -109,26 +109,19 @@ public class UserServiceImpl implements UserService {
             case OVER_400 -> totalScore += 300;
             case OVER_600 -> totalScore += 400;
         }
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int loading = 0;
 
-                while (loading < 100) {
-                    loading += 1 + (int)(Math.random() * 13);
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    if(loading > 100) loading = 100;
-                    System.out.println("신용점수를 측정 중입니다 "+loading+"%");
-
-                }
+        int loading = 0;
+        while (loading < 100) {
+            loading += 1 + (int)(Math.random() * 13);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-        });
-        t.start();
-        t.join();
+            if(loading > 100) loading = 100;
+            System.out.println("신용점수를 측정 중입니다 "+loading+"%");
+        }
+
         return totalScore;
     }
 }
