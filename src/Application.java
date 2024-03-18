@@ -157,8 +157,7 @@ public class Application {
                 List<Account> accounts = accountController.getAccounts(userState.getUid()); // controller에서 계좌 번호 목록을 보여준다.
                 int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌 중 해지하실 계좌를 선택해주세요",1,accounts.size());
                 Account account = accounts.get(showAccountChoice - 1); // 계좌 선택
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+                account.validatePassword(); // 계좌 비밀 번호를 인증한다.
                 accountController.deleteAccount(account.getId()); // 계좌 해지를 진행한다.
                 ConsoleUtility.systemMessage("계좌해지 완료되었습니다."); // 계좌 해지 완료 문구 출력
             }
@@ -168,8 +167,7 @@ public class Application {
                 List<Account> accounts = accountController.getAccounts(userState.getUid());
                 int showAccountChoice = ConsoleUtility.promptForChoice("입금하실 계좌를 선택해주세요",1,accounts.size());
                 Account account = accounts.get(showAccountChoice - 1);
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+                account.validatePassword(); // 계좌 비밀 번호를 인증한다.
                 int inputAmount = ConsoleUtility.promptForInt("입금하실 금액을 눌러주세요");
                 TransactionHistory transactionHistory = accountController.deposit(account, inputAmount); // 입금 후 거래내역 가져오기
                 ConsoleUtility.systemMessage("입금이 완료되었습니다. 현재 잔액은 " + transactionHistory.totalAmount() + "입니다."); // 입금 후 잔액 조회
@@ -180,8 +178,7 @@ public class Application {
                 List<Account> accounts = accountController.getAccounts(userState.getUid());
                 int showAccountChoice = ConsoleUtility.promptForChoice("출금하실 계좌를 선택해주세요",1,accounts.size());
                 Account account = accounts.get(showAccountChoice - 1);
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+                account.validatePassword(); // 계좌 비밀 번호를 인증한다.
                 int inputAmount = ConsoleUtility.promptForInt("출금하실 금액을 눌러주세요");
                 TransactionHistory transactionHistory = accountController.withdraw(account, inputAmount); // 출금 후 거래내역 가져오기
                 ConsoleUtility.systemMessage("출금이 완료되었습니다. 현재 잔액은 " + transactionHistory.totalAmount() + "입니다."); // 출금 후 잔액 조회
@@ -193,8 +190,7 @@ public class Application {
                 List<Account> accounts = accountController.getAccounts(userState.getUid()); // controller에서 계좌 번호 목록을 보여준다.
                 int showAccountChoice = ConsoleUtility.promptForChoice("위의 계좌 중 조회하실 계좌를 선택해주세요",1,accounts.size());
                 Account account = accounts.get(showAccountChoice - 1); // 계좌 선택
-                int inputPassword = ConsoleUtility.promptForInt("계좌 비밀번호 4자리를 입력해주세요");
-                account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
+                account.validatePassword(); // 계좌 비밀 번호를 인증한다.
                 List<TransactionHistory> transactionHistorys = accountController.showTransactions(account.getId());
                 transactionHistorys.forEach(transactionHistory -> System.out.println(transactionHistorys));
             }
