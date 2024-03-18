@@ -1,5 +1,7 @@
 package account.domain;
 
+import common.util.ConsoleUtility;
+
 import java.time.LocalDateTime;
 
 public class Account {
@@ -36,14 +38,15 @@ public class Account {
         this.balance -= money;
     }
 
-    public void validatePassword(int password) throws Exception {
-        if (password == Integer.parseInt(this.password)) {
-            lockCount = 0;
-            return;
+    public void validatePassword() throws Exception {
+        int i = 0;
+        while (i < 3) {
+            int password = ConsoleUtility.promptForInt("비밀번호 4자리를 눌러주세요");
+            if (password == Integer.parseInt(this.password)) return;
+            System.out.println("비밀번호가 틀렸습니다. 다시 입력해주세요");
+            i++;
         }
-        System.out.println("비밀번호가 틀렸습니다. 다시 입력해주세요");
-        lockCount++;
-        if(lockCount >= 3) throw new Exception("비밀번호가 3번 틀렸습니다. 처음부터 다시 시작해주세요");
+        throw new Exception("비밀번호가 3번 틀렸습니다. 처음부터 다시 시작해주세요");
     }
 
     public void setId(int id) {
