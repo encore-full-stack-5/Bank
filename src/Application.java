@@ -66,12 +66,12 @@ public class Application {
         int choice = ConsoleUtility.promptForChoice("메뉴를 선택해주세요 1.유저관리 2.계좌관리 3.신용점수측정 4.은행조회",1,4);
         switch (choice) {
             case 1 -> userMenu();
-            case 2 -> { accountMenu(); }
+            case 2 -> accountMenu();
             case 3 -> {
                 int score = userController.measureCreditScore(userState);
                 ConsoleUtility.systemMessage("신용점수 : " + score);
             }
-            case 4 -> { bankMenu(); }
+            case 4 -> bankMenu();
         }
     }
 
@@ -104,39 +104,8 @@ public class Application {
         int choice = ConsoleUtility.promptForChoice("1.은행지점조회 2.방문상담예약 3.직원정보조회",1,3);
         switch (choice) {
             case 1 -> bankController.findAllBanks();
-            case 2 -> {
-                List<Bank> banks = bankController.findAllBanks();
-                int showBankChoice = ConsoleUtility.promptForChoice("위의 지점중 예약할 지점을 선택해주세요",1,banks.size());
-                int choseBankId = banks.get(showBankChoice-1).getId();
-                List<Reservation> reservations = reservationController.findAllReservationsById(choseBankId);
-
-
-                reservationController.printAvailableTime(reservations,choseBankId,banks);
-
-                int choseReservationTime = ConsoleUtility.promptForChoice("위의 시간중 예약할 시간을 입력해주세요",8,15);
-                boolean availableTime = reservationController.isAvailableTime(choseBankId,choseReservationTime);
-                if(availableTime){
-                    System.out.println("예약 가능한 시간입니다.");
-                    reservationController.createReservation(userState.getUid(), choseReservationTime,choseBankId);
-                    System.out.println("예약이 완료되었습니다.");
-                }else {
-                    System.out.println("예약 불가능한 시간입니다.");
-                }
-            }
-            case 3 -> {
-                List<Bank> banks = bankController.findAllBanks();
-                int showBankChoice = ConsoleUtility.promptForChoice("지점을 선택해주세요", 1, banks.size());
-                int choseBankId = banks.get(showBankChoice - 1).getId();
-                // 은행 아이디로 찾기
-                List<Employee> employees = bankController.findEmployeeByBankId(choseBankId);
-                int employeeChoice = ConsoleUtility.promptForChoice("정보를 조회할 직원을 선택해주세요", 1, employees.size()) - 1;
-                int choseId = employees.get(employeeChoice).getId();
-
-                Employee employee = bankController.showEmployee(choseId);
-                System.out.println("\n****** " + employees.get(employeeChoice).getName() + "이/가 개설한 계좌 ******");
-                List<Account> accounts = bankController.findAccountsByEmployeeId(employee.getId());
-                System.out.println();
-            }
+            case 2 -> makeReservation();
+            case 3 -> showEmployees();
         }
         System.out.println();
     }
@@ -219,6 +188,37 @@ public class Application {
         account.validatePassword(inputPassword); // 계좌 비밀 번호를 인증한다.
         List<TransactionHistory> transactionHistorys = accountController.showTransactions(account.getId());
         transactionHistorys.forEach(System.out::println);
+    }
 
+    public static void showEmployees() throws Exception {
+        List<Bank> banks = bankController.findAllBanks();
+        int showBankChoice = ConsoleUtility.promptForChoice("지점을 선택해주세요", 1, banks.size());
+        int choseBankId = banks.get(showBankChoice - 1).getId();
+        // 은행 아이디로 찾기
+        List<Employee> employees = bankController.findEmployeeByBankId(choseBankId);
+        int employeeChoice = ConsoleUtility.promptForChoice("정보를 조회할 직원을 선택해주세요", 1, employees.size()) - 1;
+        int choseId = employees.get(employeeChoice).getId();
+
+        Employee employee = bankController.showEmployee(choseId);
+        System.out.println("\n****** " + employees.get(employeeChoice).getName() + "이/가 개설한 계좌 ******");
+        List<Account> accounts = bankController.findAccountsByEmployeeId(employee.getId());
+        System.out.println();
+    }
+
+    public static void makeReservation() throws Exception {
+        List<Bank> banks = bankController.findAllBanks();
+        int showBankChoice = ConsoleUtility.promptForChoice("위의 지점중 예약할 지점을 선택해주세요",1,banks.size());
+        int choseBankId = banks.get(showBankChoice-1).getId();
+        List<Reservation> reservations = reservationController.findAllReservationsById(choseBankId);
+        reservationController.printAvailableTime(reservations,choseBankId,banks);
+        int choseReservationTime = ConsoleUtility.promptForChoice("위의 시간중 예약할 시간을 입력해주세요",8,15);
+        boolean availableTime = reservationController.isAvailableTime(choseBankId,choseReservationTime);
+        if(availableTime){
+            System.out.println("예약 가능한 시간입니다.");
+            reservationController.createReservation(userState.getUid(), choseReservationTime,choseBankId);
+            System.out.println("예약이 완료되었습니다.");
+        }else {
+            System.out.println("예약 불가능한 시간입니다.");
+        }
     }
 }
