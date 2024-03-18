@@ -109,24 +109,13 @@ public class Application {
                 int showBankChoice = ConsoleUtility.promptForChoice("위의 지점중 예약할 지점을 선택해주세요",1,banks.size());
                 int choseBankId = banks.get(showBankChoice-1).getId();
                 List<Reservation> reservations = reservationController.findAllReservationsById(choseBankId);
-                boolean isReservated;
-                System.out.println("* "+banks.get(choseBankId-1).getName()+"의 예약 가능한 시간");
-                System.out.print("< ");
-                for (int i = 0; i<=7;i++){
-                    isReservated = false;
-                    for (int j = 0; j < reservations.size(); j++) {
-                        if((i+8) == reservations.get(j).getReservationTime()){
-                            isReservated = true;
-                        }
-                    }
-                    if(isReservated == false){
-                        System.out.print((i+8)+"시 ");
-                    }
-                } // 해당 지점에 예약이 되어있는 시간을 제외하고 모두 출력해줌
-                System.out.println(">");
-                System.out.println();
+
+
+                reservationController.printAvailableTime(reservations,choseBankId,banks);
+
                 int choseReservationTime = ConsoleUtility.promptForChoice("위의 시간중 예약할 시간을 입력해주세요",8,15);
                 reservationController.createReservation(userState.getUid(), choseReservationTime,choseBankId);
+
             }
         }
         System.out.println();
