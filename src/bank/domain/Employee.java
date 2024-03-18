@@ -48,4 +48,10 @@ public class Employee {
     public LocalDateTime getCreatedTime() {
         return createdTime;
     }
+
+    @Override
+    public String toString() {
+        return "직원 [id=" + id + ", name=" + name + ", position=" + position + ", phoneNumber=" + phoneNumber
+                + ", email=" + email + ", bankId=" + bankId + ", createdTime=" + createdTime + "]";
+    }
 }

@@ -1,5 +1,6 @@
 package bank.application;
 
+import account.domain.Account;
 import bank.domain.Bank;
 import bank.domain.Employee;
 
@@ -12,4 +13,5 @@ public interface BankService {
     List<Employee> findEmployeesByBankId(int bankId) throws Exception;
     Employee getEmployee(int id) throws Exception;
 
+    List<Account> findAccountsByEmployeeId(int id) throws Exception;
 }

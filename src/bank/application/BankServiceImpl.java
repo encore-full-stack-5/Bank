@@ -1,5 +1,6 @@
 package bank.application;
 
+import account.domain.Account;
 import bank.domain.Bank;
 import bank.domain.Employee;
 import bank.repository.BankRepositoryDB;
@@ -30,7 +31,9 @@ public class BankServiceImpl implements BankService {
     public List<Employee> findEmployeesByBankId(int bankId) throws Exception{
         return bankRepository.findEmployeesByBankId(bankId);
     }
-
+    public List<Account> findAccountsByEmployeeId(int employeeId) throws Exception{
+        return bankRepository.findAccountsByEmployeeId(employeeId);
+    }
     @Override
     public List<Bank> findAllBanks() throws Exception {
         return bankRepository.findAllBanks();
@@ -38,6 +41,5 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public Employee getEmployee(int id) throws Exception {
-        return null;
-    }
+        return bankRepository.findEmployeeById(id);    }
 }

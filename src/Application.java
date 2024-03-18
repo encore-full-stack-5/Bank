@@ -101,7 +101,7 @@ public class Application {
     }
   
     public static void bankMenu() throws Exception {
-        int choice = ConsoleUtility.promptForChoice("1.은행지점조회 2.방문상담예약",1,2);
+        int choice = ConsoleUtility.promptForChoice("1.은행지점조회 2.방문상담예약 3.직원정보조회",1,3);
         switch (choice) {
             case 1 -> bankController.findAllBanks();
             case 2 -> {
@@ -122,7 +122,20 @@ public class Application {
                 }else {
                     System.out.println("예약 불가능한 시간입니다.");
                 }
+            }
+            case 3 -> {
+                List<Bank> banks = bankController.findAllBanks();
+                int showBankChoice = ConsoleUtility.promptForChoice("지점을 선택해주세요", 1, banks.size());
+                int choseBankId = banks.get(showBankChoice - 1).getId();
+                // 은행 아이디로 찾기
+                List<Employee> employees = bankController.findEmployeeByBankId(choseBankId);
+                int employeeChoice = ConsoleUtility.promptForChoice("정보를 조회할 직원을 선택해주세요", 1, employees.size()) - 1;
+                int choseId = employees.get(employeeChoice).getId();
 
+                Employee employee = bankController.showEmployee(choseId);
+                System.out.println("\n****** " + employees.get(employeeChoice).getName() + "이/가 개설한 계좌 ******");
+                List<Account> accounts = bankController.findAccountsByEmployeeId(employee.getId());
+                System.out.println();
             }
         }
         System.out.println();
