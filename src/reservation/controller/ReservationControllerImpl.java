@@ -1,5 +1,6 @@
 package reservation.controller;
 
+import bank.domain.Bank;
 import reservation.application.ReservationService;
 import reservation.application.ReservationServiceImpl;
 import reservation.domain.Reservation;
@@ -26,4 +27,10 @@ public class ReservationControllerImpl implements ReservationController {
     public void createReservation(int UserId, int choseReservationTime, int choseBankId) throws Exception {
         reservationService.createReservation(UserId,choseReservationTime,choseBankId);
     }
+
+    @Override
+    public void printAvailableTime(List<Reservation> reservations,int choseBankId,List<Bank> banks) throws Exception {
+        reservationService.printAvailableTime(reservations,choseBankId,banks);
+    }
+
 }
