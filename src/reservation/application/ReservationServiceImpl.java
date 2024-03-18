@@ -54,5 +54,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Override
+    public boolean isAvailableTime(int choseBankId,int choseReservationTime) throws Exception {
+        boolean availableTime =reservationRepository.isAvailableTime(choseBankId, choseReservationTime);
+        return availableTime;
+    }
+
 
 }

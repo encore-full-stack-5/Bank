@@ -10,4 +10,6 @@ public interface ReservationController {
     void createReservation(int UserId, int choseReservationTime, int choseBankId ) throws Exception;
 
     void printAvailableTime(List<Reservation> reservations,int choseBankId,List<Bank> banks) throws Exception;
+
+    boolean isAvailableTime(int choseBankId,int choseReservationTime) throws Exception;
 }
