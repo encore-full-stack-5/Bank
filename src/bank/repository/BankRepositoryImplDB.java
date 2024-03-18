@@ -1,5 +1,7 @@
 package bank.repository;
 
+import account.domain.Account;
+import account.domain.AccountType;
 import bank.domain.Bank;
 import bank.domain.Employee;
 import db.DB;
@@ -66,6 +68,22 @@ public class BankRepositoryImplDB implements BankRepositoryDB {
         return employees;
     }
 
+    @Override
+    public List<Account> findAccountsByEmployeeId(int employeeId) throws Exception {
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM Account where employeeId = ?";
+        try (Connection conn = DB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, employeeId);
+            try(ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    accounts.add(extractAccount(rs));
+                }
+            }
+        }
+        return accounts;
+    }
+
     private Employee extractEmployee(ResultSet rs) throws Exception {
         return new Employee(
                 rs.getInt("id"),
@@ -87,6 +105,19 @@ public class BankRepositoryImplDB implements BankRepositoryDB {
                 rs.getTimestamp("openTime").toLocalDateTime(),
                 rs.getTimestamp("closeTime").toLocalDateTime(),
                 rs.getTimestamp("createdTime").toLocalDateTime()
+        );
+    }
+
+    private Account extractAccount(ResultSet rs) throws Exception {
+        String isType = rs.getString("type");
+        return new Account(
+                rs.getString("accountNumber"),
+                0, AccountType.valueOf(isType),
+                rs.getInt("bankId"),
+                rs.getInt("userId"),
+                rs.getInt("employeeId"),
+                null,
+                rs.getFloat("interestRate")
         );
     }
 }
