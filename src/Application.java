@@ -84,6 +84,7 @@ public class Application {
             }
             case 2 -> logout();
             case 3 -> {
+                userState.validatePassword();
                 userController.unResgiter(userState);
                 ConsoleUtility.systemMessage("회원탈퇴에 성공했습니다.");
                 logout();

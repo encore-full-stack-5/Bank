@@ -1,5 +1,7 @@
 package user.domain;
 
+import common.util.ConsoleUtility;
+
 import java.time.LocalDateTime;
 
 public class User {
@@ -98,6 +100,17 @@ public class User {
 
     public int getAge() throws Exception {
         return LocalDateTime.now().getYear() - Integer.parseInt(birth);
+    }
+
+    public void validatePassword() throws Exception {
+        int i = 0;
+        while (i < 3) {
+            String password = ConsoleUtility.promptForInput("비밀번호를 입력해주세요");
+            if (password.equals(this.password)) return;
+            System.out.println("비밀번호가 틀렸습니다. 다시 입력해주세요");
+            i++;
+        }
+        throw new Exception("비밀번호가 3번 틀렸습니다. 처음부터 다시 시작해주세요");
     }
 
     @Override
