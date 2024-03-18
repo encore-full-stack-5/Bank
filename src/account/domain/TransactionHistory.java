@@ -16,10 +16,8 @@ public record TransactionHistory(
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return "거래 내역 {" +
-                "\n   거래 ID: " + id +
                 "\n   거래 유형: " + type + // "입금" 또는 "출금"
                 "\n   총액: " + totalAmount +
-                "\n   계정 ID: " + accountId +
                 "\n   금액: " + amount +
                 "\n   생성 시간: " + createdTime.format(formatter) +
                 '\n' + '}';
