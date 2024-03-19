@@ -29,7 +29,7 @@ public class BankControllerImpl implements BankController {
     @Override
     public List<Employee> findEmployeeByBankId(int bankId) throws Exception {
         List<Employee> employees =bankService.findEmployeesByBankId(bankId);
-        employees.forEach(employee -> System.out.print((employee.getId() - 1) % 5 + 1+"."+employee.getName()+":"+employee.getPosition()+" "));
+        employees.forEach(employee -> System.out.println((employee.getId() - 1) % 5 + 1+"."+employee.getName()+":"+employee.getPosition()+" "));
         System.out.println();
         return employees;
     }

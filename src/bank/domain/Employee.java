@@ -51,7 +51,12 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "직원 [id=" + id + ", name=" + name + ", position=" + position + ", phoneNumber=" + phoneNumber
-                + ", email=" + email + ", bankId=" + bankId + ", createdTime=" + createdTime + "]";
+        return "직원 정보 {" +
+                "\n   이름 : " + name +
+                "\n   직책 : " + position +   // 보안상 비밀번호는 실제로 표시하지 않는 것이 좋습니다.
+                "\n   전화번호 : " + phoneNumber +
+                "\n   이메일 : " + email +
+                '\n' + '}';
     }
+
 }

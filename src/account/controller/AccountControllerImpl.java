@@ -55,7 +55,7 @@ public class AccountControllerImpl implements AccountController {
             System.out.println("조회할 수 있는 계좌가 없습니다.");
         } else {
             for(int i=0; i<accounts.size(); i++) {
-                System.out.print(i+1+"."+ accounts.get(i).getAccountNumber()+" ");
+                System.out.println(i+1+"."+ accounts.get(i).getAccountNumber()+" ");
             }
         }
         System.out.println();

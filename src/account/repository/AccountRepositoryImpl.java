@@ -28,6 +28,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         String sql = "INSERT INTO Account (accountNumber, balance, type, bankId, userId, employeeId, password, interestRate, createdTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DB.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            LocalDateTime time = LocalDateTime.now();
             stmt.setString(1, account.getAccountNumber());
             stmt.setInt(2, account.getBalance());
             stmt.setString(3, account.getType().name());
@@ -36,12 +37,13 @@ public class AccountRepositoryImpl implements AccountRepository {
             stmt.setInt(6, account.getEmployeeId());
             stmt.setString(7, account.getPassword());
             stmt.setFloat(8, account.getInterestRate());
-            stmt.setTimestamp(9, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+            stmt.setTimestamp(9, java.sql.Timestamp.valueOf(time));
             stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     account.setId(generatedKeys.getInt(1));
+                    account.setCreatedTime(time);
                     return account;
                 } else {
                     throw new Exception("계좌 생성 실패, ID를 가져올 수 없습니다.");
