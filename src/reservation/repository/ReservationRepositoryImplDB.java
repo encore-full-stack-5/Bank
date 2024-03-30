@@ -61,6 +61,7 @@ public class ReservationRepositoryImplDB implements ReservationRepositoryDB {
         }
     }
 
+
     private Reservation extractReservation(ResultSet rs) throws Exception {
         return new Reservation(
                 rs.getInt("id"),
