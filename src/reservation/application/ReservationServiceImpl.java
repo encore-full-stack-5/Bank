@@ -8,7 +8,10 @@ import reservation.domain.Reservation;
 import reservation.repository.ReservationRepositoryDB;
 import reservation.repository.ReservationRepositoryImplDB;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ReservationServiceImpl implements ReservationService {
 
@@ -23,33 +26,23 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> findAllReservationsById(int bankId) throws Exception{
-        return reservationRepository.findAllReservationsById(bankId);
-    }
-
-    @Override
     public void createReservation(int UserId, int choseReservationTime, int choseBankId) throws Exception {
         reservationRepository.createReservation(UserId, choseReservationTime, choseBankId);
     }
 
     @Override
-    public void printAvailableTime(List<Reservation> reservations,int choseBankId,List<Bank> banks) throws Exception {
-        boolean isReservated = false;
+    public void printAvailableTime(int choseBankId,List<Bank> banks) throws Exception {
+        List<Reservation> reservations = reservationRepository.findAvailableReservationsByBankId(choseBankId);
         System.out.println("* "+banks.get(choseBankId-1).getName()+"의 예약 가능한 시간");
         System.out.print("< ");
+        String availableTimes = IntStream.rangeClosed(9, 15)
+                .filter(time -> reservations.stream()
+                        .noneMatch(reservation -> reservation.getReservationTime() == time))
+                .mapToObj(Integer::toString)
+                .collect(Collectors.joining(", "));
+        System.out.print(availableTimes);
 
-        for (int i = 0; i<=7;i++){
-            isReservated = false;
-            for (int j = 0; j < reservations.size(); j++) {
-                if((i+8) == reservations.get(j).getReservationTime()){
-                    isReservated = true;
-                }
-            }
-            if(isReservated == false){
-                System.out.print((i+8)+"시 ");
-            }
-        } // 해당 지점에 예약이 되어있는 시간을 제외하고 모두 출력해줌
-        System.out.println(">");
+        System.out.println(" >");
         System.out.println();
 
     }
