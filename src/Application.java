@@ -208,8 +208,7 @@ public class Application {
         List<Bank> banks = bankController.findAllBanks();
         int showBankChoice = ConsoleUtility.promptForChoice("위의 지점중 예약할 지점을 선택해주세요", 1, banks.size());
         int choseBankId = banks.get(showBankChoice - 1).getId();
-        List<Reservation> reservations = reservationController.findAllReservationsById(choseBankId);
-        reservationController.printAvailableTime(reservations, choseBankId, banks);
+        reservationController.printAvailableTime(choseBankId, banks);
         int choseReservationTime = ConsoleUtility.promptForChoice("위의 시간중 예약할 시간을 입력해주세요", 8, 15);
         boolean availableTime = reservationController.isAvailableTime(choseBankId, choseReservationTime);
         if (availableTime) {

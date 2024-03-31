@@ -18,19 +18,13 @@ public class ReservationControllerImpl implements ReservationController {
     }
 
     @Override
-    public List<Reservation> findAllReservationsById(int bankId) throws Exception{
-        List<Reservation> reservationList =reservationService.findAllReservationsById(bankId);
-        return reservationList;
-    }
-
-    @Override
     public void createReservation(int UserId, int choseReservationTime, int choseBankId) throws Exception {
         reservationService.createReservation(UserId,choseReservationTime,choseBankId);
     }
 
     @Override
-    public void printAvailableTime(List<Reservation> reservations,int choseBankId,List<Bank> banks) throws Exception {
-        reservationService.printAvailableTime(reservations,choseBankId,banks);
+    public void printAvailableTime(int choseBankId,List<Bank> banks) throws Exception {
+        reservationService.printAvailableTime(choseBankId,banks);
     }
 
     @Override

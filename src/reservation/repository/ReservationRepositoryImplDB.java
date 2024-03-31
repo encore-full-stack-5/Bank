@@ -22,7 +22,7 @@ public class ReservationRepositoryImplDB implements ReservationRepositoryDB {
     }
 
     @Override
-    public List<Reservation> findAllReservationsById(int bankId) throws Exception {
+    public List<Reservation> findAvailableReservationsByBankId(int bankId) throws Exception {
         List<Reservation> banks = new ArrayList<>();
         String sql = "SELECT * FROM Reservation WHERE bankId ="+bankId;
         try (Connection conn = DB.getConnection();
